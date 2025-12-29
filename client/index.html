@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DeepL GUI</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>DeepL Translator</h1>
+      <button id="theme-toggle">🌙</button>
+    </header>
+
+    <main class="translator">
+      <section class="panel">
+        <div class="panel-header">
+          <select id="source-lang"></select>
+          <span id="char-count">0</span>
+        </div>
+        <textarea id="source-text" placeholder="Enter text"></textarea>
+      </section>
+
+      <button id="swap">⇄</button>
+
+      <section class="panel">
+        <select id="target-lang"></select>
+        <textarea id="target-text" readonly></textarea>
+      </section>
+    </main>
+
+    <div class="actions">
+      <button id="translate">Translate</button>
+    </div>
+
+    <footer>
+      <span id="usage"></span>
+      <span id="detected"></span>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
