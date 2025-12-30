@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>DeepL GUI</title>
     <link rel="stylesheet" href="/src/style.css" />
-  </head>
-  <body>
+</head>
+
+<body>
     <header>
-      <h1>DeepL Translator</h1>
-      <button id="theme-toggle">🌙</button>
+        <h1>DeepL Translator</h1>
+        <button id="theme-toggle">🌙</button>
     </header>
 
     <main class="translator">
-      <section class="panel">
-        <div class="panel-header">
-          <select id="source-lang"></select>
-          <span id="char-count">0</span>
+        <div class="translator-wrapper">
+            <div class="translator-header">
+                <select id="source-lang"></select>
+                <button id="swap">⇄</button>
+                <select id="target-lang"></select>
+            </div>
+
+            <div class="panels">
+                <section class="panel panel-source">
+                    <textarea id="source-text" placeholder="Enter text"></textarea>
+                    <div class="panel-footer">
+
+                    </div>
+                </section>
+
+                <section class="panel panel-target">
+                    <textarea id="target-text" readonly></textarea>
+                    <div class="panel-footer"></div>
+                </section>
+            </div>
+
+            <div class="translator-footer">
+                <div class="left">
+                    <span id="copy-source">Copy</span>
+                    <span id="char-count">0</span>
+                </div>
+                <div class="right">
+                    <span id="copy-target">Copy</span>
+                    <span id="usage-info">
+                        <span id="usage"></span>
+                        <span id="detected"></span>
+                    </span>
+                </div>
+            </div>
         </div>
-        <textarea id="source-text" placeholder="Enter text"></textarea>
-      </section>
-
-      <button id="swap">⇄</button>
-
-      <section class="panel">
-        <select id="target-lang"></select>
-        <textarea id="target-text" readonly></textarea>
-      </section>
     </main>
 
     <div class="actions">
-      <button id="translate">Translate</button>
+        <button id="translate">Translate</button>
     </div>
 
-    <footer>
-      <span id="usage"></span>
-      <span id="detected"></span>
-    </footer>
-
     <script type="module" src="/src/main.ts"></script>
-  </body>
+</body>
+
 </html>

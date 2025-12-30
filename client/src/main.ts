@@ -1,12 +1,12 @@
 import { DEMO_LANGS } from "./demo";
-import { save, load } from "./storage";
+import { setItem, getItem } from "./storage";
 
-const sourceText = document.querySelector("#source-text")!;
-const targetText = document.querySelector("#target-text")!;
-const sourceLang = document.querySelector("#source-lang")!;
-const targetLang = document.querySelector("#target-lang")!;
-const translateBtn = document.querySelector("#translate")!;
-const swapBtn = document.querySelector("#swap")!;
+const sourceText = document.querySelector<HTMLTextAreaElement>("#source-text")!;
+const targetText = document.querySelector<HTMLTextAreaElement>("#target-text")!;
+const sourceLang = document.querySelector<HTMLSelectElement>("#source-lang")!;
+const targetLang = document.querySelector<HTMLSelectElement>("#target-lang")!;
+const translateBtn = document.querySelector<HTMLButtonElement>("#translate")!;
+const swapBtn = document.querySelector<HTMLButtonElement>("#swap")!;
 const counter = document.querySelector("#char-count")!;
 const usage = document.querySelector("#usage")!;
 const detected = document.querySelector("#detected")!;
@@ -30,24 +30,27 @@ async function loadLanguages() {
 
     sourceLang.innerHTML = `<option value="">Auto detect</option>`;
     data.source.forEach((l: any) =>
-      sourceLang.innerHTML += `<option value="${l.language}">${l.name}</option>`
+      sourceLang.innerHTML += `<option value="${l.code}">${l.name}</option>`
     );
 
     targetLang.innerHTML = "";
     data.target.forEach((l: any) =>
-      targetLang.innerHTML += `<option value="${l.language}">${l.name}</option>`
+      targetLang.innerHTML += `<option value="${l.code}">${l.name}</option>`
     );
   } catch {
     demoMode = true;
     sourceLang.innerHTML = `<option value="">Auto detect</option>`;
     DEMO_LANGS.forEach(l =>
-      sourceLang.innerHTML += `<option value="${l.language}">${l.name}</option>`
+      sourceLang.innerHTML += `<option value="${l.code}">${l.name}</option>`
     );
     DEMO_LANGS.forEach(l =>
-      targetLang.innerHTML += `<option value="${l.language}">${l.name}</option>`
+      targetLang.innerHTML += `<option value="${l.code}">${l.name}</option>`
     );
   }
 }
+
+sourceLang.addEventListener("change", (e) => setItem("sourceLang", (e.target as HTMLSelectElement).value));
+targetLang.addEventListener("change", (e) => setItem("targetLang", (e.target as HTMLSelectElement).value));
 
 translateBtn.addEventListener("click", async () => {
   if (demoMode) return;
@@ -68,7 +71,7 @@ translateBtn.addEventListener("click", async () => {
     ? `Detected: ${data.detected}`
     : "";
   loadUsage();
-  persist();
+  // persist();
 });
 
 swapBtn.addEventListener("click", () => {
@@ -76,20 +79,35 @@ swapBtn.addEventListener("click", () => {
     [targetLang.value, sourceLang.value];
   [sourceText.value, targetText.value] =
     [targetText.value, sourceText.value];
-  persist();
+
+  setItem("sourceLang", sourceLang.value);
+  setItem("targetLang", targetLang.value);
 });
 
 sourceText.addEventListener("input", () => {
   counter.textContent = sourceText.value.length.toString();
-  persist();
+  setItem("sourceText", sourceText.value);
 });
 
+function applyTheme(theme: "light" | "dark") {
+  document.documentElement.setAttribute("data-theme", theme);
+  setItem("theme", theme);
+}
+
+function detectTheme() {
+  const saved = getItem("theme") as "light" | "dark" | null;
+  if (saved) {
+    applyTheme(saved);
+  } else {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(prefersDark ? "dark" : "light");
+  }
+}
+
 themeToggle.addEventListener("click", () => {
-  const html = document.documentElement;
-  const next =
-    html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  html.setAttribute("data-theme", next);
-  persist();
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  applyTheme(next);
 });
 
 async function loadUsage() {
@@ -104,26 +122,25 @@ async function loadUsage() {
   }
 }
 
-function persist() {
-  save({
-    sourceText: sourceText.value,
-    sourceLang: sourceLang.value,
-    targetLang: targetLang.value,
-    theme: document.documentElement.getAttribute("data-theme")
-  });
-}
+// function persist() {
+//   save({
+//     sourceText: sourceText.value,
+//     sourceLang: sourceLang.value,
+//     targetLang: targetLang.value,
+//     theme: document.documentElement.getAttribute("data-theme")
+//   });
+// }
 
 function restore() {
-  const state = load();
-  if (!state) return;
-  sourceText.value = state.sourceText || "";
-  sourceLang.value = state.sourceLang || "";
-  targetLang.value = state.targetLang || "EN";
-  document.documentElement.setAttribute("data-theme", state.theme || "light");
+  sourceText.value = getItem("sourceText") || "";
+  sourceLang.value = getItem("sourceLang") || "";
+  targetLang.value = getItem("targetLang") || "EN";
+  document.documentElement.setAttribute("data-theme", getItem("theme") || "light");
 }
 
 (async function init() {
   demoMode = await detectDemo();
+  detectTheme();
   await loadLanguages();
   restore();
   loadUsage();
