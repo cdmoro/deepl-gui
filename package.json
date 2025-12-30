@@ -3,8 +3,7 @@
   "workspaces": ["client", "server"],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
-    "build": "npm run build --workspace client",
-    "build:netlify": "npm install --prefix client && npm run build --prefix client"
+    "build": "npm run build --workspace client"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
