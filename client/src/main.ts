@@ -53,7 +53,7 @@ sourceLang.addEventListener("change", (e) => setItem("sourceLang", (e.target as 
 targetLang.addEventListener("change", (e) => setItem("targetLang", (e.target as HTMLSelectElement).value));
 
 translateBtn.addEventListener("click", async () => {
-  if (demoMode) return;
+  if (demoMode || !sourceText.value) return;
 
   const res = await fetch("/api/translate", {
     method: "POST",
@@ -110,14 +110,37 @@ themeToggle.addEventListener("click", () => {
   applyTheme(next);
 });
 
+function formatUsage(used: number, limit: number) {
+  const ratio = used / limit;
+  const pct = ratio * 100;
+
+  let pctText: string;
+
+  if (pct === 0) {
+    pctText = "0%";
+  } else if (pct < 0.01) {
+    pctText = "<0.01%";
+  } else if (pct < 1) {
+    pctText = `${pct.toFixed(2)}%`;
+  } else {
+    pctText = `${Math.round(pct)}%`;
+  }
+
+  const usedFmt = used.toLocaleString();
+  const limitFmt = limit.toLocaleString();
+
+  return `Usage: ${usedFmt} / ${limitFmt} (${pctText})`;
+}
+
+
 async function loadUsage() {
   try {
     const res = await fetch("/api/usage");
     const data = await res.json();
-    const pct = Math.round((data.used / data.limit) * 100);
-    usage.textContent = `Usage: ${data.used} / ${data.limit} (${pct}%)`;
+
+    usage.textContent = formatUsage(data.used, data.limit);
   } catch {
-    usage.textContent = "Demo mode";
+    usage.textContent = "Usage unavailable (demo mode)";
     translateBtn.setAttribute("disabled", "true");
   }
 }

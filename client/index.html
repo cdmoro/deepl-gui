@@ -3,21 +3,40 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>DeepL GUI</title>
+    <title>DeepL API Web Client</title>
+    <link rel="icon" href="/img/favicon/favicon_16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/img/favicon/favicon_32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon/favicon_96.png" sizes="96x96" type="image/png">
+
     <link rel="stylesheet" href="/src/style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <h1>DeepL Translator</h1>
-        <button id="theme-toggle">🌙</button>
+        <div class="toolbar">
+            <button id="theme-toggle">🌙</button>
+        </div>
+        <div class="title">
+            <h1>DeepL API Playground</h1>
+            <p>An unofficial, open-source playground for experimenting with the DeepL API in real time.</p>
+        </div>
     </header>
 
     <main class="translator">
-        <div class="translator-wrapper">
+        <div class="card translator-wrapper">
             <div class="translator-header">
                 <select id="source-lang"></select>
-                <button id="swap">⇄</button>
+                <button id="swap">
+                    <svg width="20" height="20" class="Icon Icon--directional as-small" aria-hidden="true"
+                        focusable="false">
+                        <use href="/icons/sprite.svg#SwitchHorizontal"></use>
+                    </svg>
+                </button>
                 <select id="target-lang"></select>
             </div>
 
@@ -25,7 +44,7 @@
                 <section class="panel panel-source">
                     <textarea id="source-text" placeholder="Enter text"></textarea>
                     <div class="panel-footer">
-
+                        <span id="detected"></span>
                     </div>
                 </section>
 
@@ -42,19 +61,17 @@
                 </div>
                 <div class="right">
                     <span id="copy-target">Copy</span>
-                    <span id="usage-info">
-                        <span id="usage"></span>
-                        <span id="detected"></span>
-                    </span>
                 </div>
             </div>
         </div>
+
+        <div class="card actions">
+            <span id="usage-info">
+                <span id="usage"></span>
+            </span>
+            <button id="translate">Translate</button>
+        </div>
     </main>
-
-    <div class="actions">
-        <button id="translate">Translate</button>
-    </div>
-
     <script type="module" src="/src/main.ts"></script>
 </body>
 

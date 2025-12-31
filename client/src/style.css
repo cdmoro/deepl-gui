@@ -13,15 +13,46 @@
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: system-ui;
+    font-family: Roboto, sans-serif;
     margin: 0;
 }
 
-header,
+h1 {
+    font-size: 56px;
+    line-height: 105%;
+    letter-spacing: -1.2px;
+    font-weight: 300;
+    margin-bottom: 0;
+}
+
 footer {
     padding: 1rem;
     display: flex;
     justify-content: space-between;
+}
+
+header .title {
+    text-align: center;
+}
+
+header .title p {
+    font-size: 20px;
+    line-height: 140%;
+}
+
+.card {
+    background: var(--panel);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+.card.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
 }
 
 .translator {
@@ -52,7 +83,7 @@ footer {
     display: flex;
 }
 
-.translator-footer > * {
+.translator-footer>* {
     flex: 1;
     padding: 1rem;
 }
@@ -60,8 +91,23 @@ footer {
 textarea {
     width: 100%;
     height: 200px;
+    background: var(--bg);
 }
 
-.actions {
-    text-align: center;
+.panel textarea {
+    border: none;
+    resize: none;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    padding: 1rem;
+}
+
+#translate {
+    background: rgb(15 43 70);
+    border: none;
+    border-radius: 40px;
+    color: #fff;
+    padding: 1rem;
+    font-size: 18px;
 }
